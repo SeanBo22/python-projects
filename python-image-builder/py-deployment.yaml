@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-version-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-version
+  template:
+    metadata:
+      labels:
+        app: python-version
+    spec:
+      containers:
+      - name: python
+        image: localhost/pyimg:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8501
+        command: ["streamlit", "run", "/mnt/sports/nfl/nfl.py"]
+        volumeMounts:
+        - name: sports-volume
+          mountPath: /mnt/sports
+      volumes:
+      - name: sports-volume
+        hostPath:
+          path: /home/cyber/python-image-builder/sports
+          type: Directory
+
